@@ -30,13 +30,11 @@
         <div id="result">
             <div id="title" class="text-center text-white-500 text-xl mt-10"></div>
             <img id="thumbnail" class="rounded mx-auto d-block"></img>
-            
-            <div class="content-center items-center" >
-                <div class="flex space-x-4 mt-5 justify-center justify-self-auto" id="mp4"></div>
-                <div class="flex space-x-4 mt-5 justify-center" id="audio"></div>
-                <div class="flex space-x-4 mt-5 justify-center" id="opus"></div>
-                <div class="flex space-x-4 mt-5 justify-center" id="webm"></div>
-                <div class="flex space-x-4 mt-5 justify-center" id="m4a"></div>
+            <div id='dllist'class='flex flex-wrap text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 md:flex mt-4 space-x-6 justify-center' >
+                <div class="w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="mp4"></div>
+                <div class="w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="opus"></div>
+                <div class="w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="webm"></div>
+                <div class="w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="m4a"></div>
             </div>
         </div>
             <script>
@@ -59,7 +57,7 @@
                 
                 (() => {
                     query = getURLQuery()
-                    if(query && query.indexOf('you') >= 0) {
+                    if(query && query.indexOf('douyin') >= 0) {
                         alert(`We found URL!\n${query}`);
                         document.getElementById("url").value = query;
                         document.getElementById("download").click();
@@ -70,7 +68,6 @@
                     document.getElementById("title").innerHTML = "";
                     document.getElementById("thumbnail").src = "";
                     document.getElementById("mp4").innerHTML = "";
-                    document.getElementById("audio").innerHTML = "";
                     document.getElementById("opus").innerHTML = "";
                     document.getElementById("webm").innerHTML = "";
                     document.getElementById("m4a").innerHTML = "";
@@ -109,18 +106,14 @@
                                     document.getElementById('thumbnail').src = `https://img.youtube.com/vi/${res.id}/hqdefault.jpg`;
                                     // sort 
                                     for (var i = 0; i < res.url.length; i++) {
-                                        dl = document.createElement('a');
+                                        dl =document.createElement('a');
                                         dl.href = res.url[i].url
-                                        dl.className = 'bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded'
-                                        dl.innerHTML = `${res.url[i].ext} ${res.url[i].attr.class && res.url[i].attr.class == 'no-audio' ? "<i class='fa-solid fa-volume-xmark'></i>" : "<i class='fa-solid fa-volume'></i>"} (${res.url[i].quality})`
+                                        dl.className = 'inline-flex relative items-center py-2 px-4 w-full text-sm font-medium rounded-t-lg border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white'
+                                        dl.innerHTML = `${res.url[i].attr.class && res.url[i].attr.class == 'no-audio' ? "<i class='fa-solid fa-volume-xmark'></i>" : "<i class='fa-solid fa-volume'></i>"} ${res.url[i].ext}.${res.url[i].quality}`
                                         document.querySelector(`#${res.url[i].ext}`).appendChild(dl)
                                     }
                                 });
-                            } 
-                            error = document.createElement('err');
-                            error.className = 'text-center text-red-500 text-xl2 mt-10';
-                            error.innerHTML("No result found! Please try another link");
-                            document.querySelector('#result').appendChild(error)
+                            }
                         })
                 });
             </script>
