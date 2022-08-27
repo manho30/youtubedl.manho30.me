@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>YouTube Video Dowmloader</title>
+        <meta name="description" content="Free oline web app allow you download video from YouTube.">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/ba1aa6d09b.js"></script>
+    </head>
+    <!-- background with dark mode-->
+    <body class="bg-gray-900 text-white">
+        <h1 class="mt-20 text-3xl font-semibold text-center decoration-teal-400">
+            YouTube Video Downloader
+        </h1>
+        <!-- make a input field, and stay away 15px far from h1 title-->
+        <input class="mt-7 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Place the link here" id="url">
+        
+        <!-- make a download button and cancel button in same row with distance-->
+        <div class="flex item-center justify-center mt-5">
+            <button id='download' class="bg-gray-300 hover:bg-gray-400 text-blue-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                <span>Download</span>
+            </button>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 focus: outline-none focus:shadow-outline" id="cancel">
+                Cancel
+            </button>
+        </div>
+        <div id="result">
+            <div id="title" class="my-8 text-center text-white-500 text-xl mt-10"></div>
+            <img id="thumbnail" class="rounded mx-auto d-block"></img>
+            <div id='ready' class="my-8 text-center text-teal-300 text-xl mt-10">
+                <i class="fa-brands fa-youtube"></i>
+                <span>Downloader is now ready to use</span>
+            </div>
+            <div id='dllist'class='my-5 flex flex-wrap text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 md:flex mt-4 space-x-6 justify-center'>
+                <div id="mp4"></div>
+                <div id="audio"></div>
+            </div>
+        </div>
+            <script>
+                document.querySelector('#cancel').addEventListener('click', function() {
+                    window.location.reload();
+                });
+                function getURLQuery() {
+                    const params = new Proxy(new URLSearchParams(window.location.search), {
+                        get: (searchParams, prop) => searchParams.get(prop),
+                    });
+                    return params.url;
+                }
+                
+                // https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+                function getUYouTubeId(url){
+                    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                    var match = url.match(regExp);
+                    return (match&&match[7].length==11)? match[7] : false;
+                }
+                
+                (() => {
+                    query = getURLQuery()
+                    if(query && query.indexOf('you') >= 0) {
+                        alert(`We found URL!\n${query}`);
+                        document.getElementById("url").value = query;
+                        document.getElementById("download").click();
+                    } 
+                })()
+                document.querySelector('#download').addEventListener('click', function() {
+                    var url = document.querySelector('#url').value;
+                    document.getElementById("title").innerHTML = "";
+                    document.getElementById("thumbnail").src = "";
+                    document.getElementById("mp4").innerHTML = "";
+                    document.getElementById("audio").innerHTML = "";
+                    if (url.length == 0) {
+                        alert('Please input a link');
+                        return;
+                    }
+                    const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/gm
+                    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?/gm
+                    const destination = regex.exec(url)
+                    const youtubeDestination = youtubeRegex.exec(url)
+                    // regex for youtube and youtube music
+                    if (!destination || !destination[0] || !youtubeDestination || !youtubeDestination[0]) {
+                        alert('Invalid URL')
+                        return;
+                    } 
+                    document.getElementById('ready').innerHTML = 'Please wait...';
+                    const videoLink = destination[0];
+                    res = fetch('https://save-from.net/api/convert',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            url: videoLink
+                        })
+                    })
+                    
+                    res
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.meta) {
+                                $(document).ready(function(){
+                                    document.getElementById('title').innerHTML = `${res.meta.title}<br>(${res.meta.duration})`;    
+                                    document.getElementById('thumbnail').src = `https://img.youtube.com/vi/${res.id}/hqdefault.jpg`;
+                                    document.getElementById('mp4').className = "w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white";
+                                    document.getElementById('audio').className = "w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white";
+                                    document.getElementById('ready').innerHTML = '<i class="fa-brands fa-youtube"></i> Ready to download';
+                                    for (var i = 0; i < res.url.length; i++) {
+                                        dl =document.createElement('a');
+                                        dl.href = res.url[i].url
+                                        dl.className = 'inline-flex relative items-center py-2 px-4 w-full text-sm font-medium rounded-t-lg border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white'
+                                        dl.innerHTML = `${res.url[i].attr.class && res.url[i].attr.class == 'no-audio' ? "<i class='fa-solid fa-volume-xmark mr-2'></i>" : "<i class='fa-solid fa-volume-high mr-2'></i>"}    ${res.url[i].quality}.${res.url[i].ext}    ${res.url[i].contentLength ? `${(res.url[i].contentLength / 1060687.7).toFixed(2) } MB` : ''}`
+                                        document.querySelector(`#${res.url[i].ext == 'mp4' ? res.url[i].ext : 'audio'}`).appendChild(dl)
+                                    }
+                                });
+                            } else {
+                                $(document).ready(()=>{
+                                    document.getElementById('ready').innerHTML = '<div class="text-red-200">Sorry<i class="fa-light fa-face-disappointed"></i><br>No result found</div>';
+                                })
+                            }
+                        })
+                });
+            </script>
+        <p class="text-center text-red-500 text-xs mt-10">
+            Do not abuse this service. This site was fully protected by <a href="https://cloudflare.com" class="text-yellow-500">Cloudflare</a>
+        </p>
+        <p class="text-center text-red-500 text-xs mt-3">
+            Web crawlers are not allowed to use this service.
+        </p>
+        <footer class="grid gap-6 px-3 pt-24 pb-12 text-gray-500 dark:text-gray-400">
+            <div class="text-sm md:text-base md:leading-6 font-light dark:text-gray-300 text-center" data-v-fad05af8="">
+                Source code is available on <a href="https://github.com/manho30/youtubeDownloader" class="text-gray-500 dark:text-gray-400" data-v-fad05af8="">GitHub</a>
+            </div>
+            <div class="text-sm text-center text-teal-300">
+               © 2022 Man Ho. All right reserved
+            </div>
+            <div class="text-sm text-center text-teal-300">
+               <a href="https://icp.gov.moe/?keyword=20228990">萌ICP备20228990号</a>
+            </div>
+        </footer>
+    </body>
+</html>
