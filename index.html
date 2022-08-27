@@ -15,7 +15,7 @@
             YouTube Video Downloader
         </h1>
         <!-- make a input field, and stay away 15px far from h1 title-->
-        <input class="mt-7 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Place the link here" id="url">
+        <input class="w-50 mt-7 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Place the link here" id="url">
         
         <!-- make a download button and cancel button in same row with distance-->
         <div class="flex item-center justify-center mt-5">
@@ -60,7 +60,6 @@
                 (() => {
                     query = getURLQuery()
                     if(query && query.indexOf('you') >= 0) {
-                        alert(`We found URL!\n${query}`);
                         document.getElementById("url").value = query;
                         document.getElementById("download").click();
                     } 
@@ -105,14 +104,15 @@
                                     document.getElementById('title').innerHTML = `${res.meta.title}<br>(${res.meta.duration})`;    
                                     document.getElementById('thumbnail').src = `https://img.youtube.com/vi/${res.id}/hqdefault.jpg`;
                                     document.getElementById('mp4').className = "w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white";
-                                    document.getElementById('audio').className = "w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white";
+                                    document.getElementById('audio').className = `${$(window).width() < 768 ? '' :  " w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"}`;
                                     document.getElementById('ready').innerHTML = '<i class="fa-brands fa-youtube"></i> Ready to download';
                                     for (var i = 0; i < res.url.length; i++) {
                                         dl =document.createElement('a');
                                         dl.href = `${res.url[i].url}`
                                         dl.className = 'inline-flex relative items-center py-2 px-4 w-full text-sm font-medium rounded-t-lg border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white'
                                         dl.innerHTML = `${res.url[i].attr.class && res.url[i].attr.class == 'no-audio' ? "<i class='fa-solid fa-volume-xmark mr-2'></i>" : "<i class='fa-solid fa-volume-high mr-2'></i>"}    ${res.url[i].quality}.${res.url[i].ext}    ${res.url[i].contentLength ? `${(res.url[i].contentLength / 1060687.7).toFixed(2) } MB` : ''}`
-                                        document.querySelector(`#${res.url[i].ext == 'mp4' ? res.url[i].ext : 'audio'}`).appendChild(dl)
+                                        append = `#${res.url[i].ext == 'mp4' ? res.url[i].ext : 'audio'}`;
+                                        document.querySelector(`${$(window).width() < 768 ? '#mp4' : append}`).appendChild(dl);
                                     }
                                 });
                             } else {
