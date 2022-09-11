@@ -56,14 +56,15 @@
                     var match = url.match(regExp);
                     return (match&&match[7].length==11)? match[7] : false;
                 }
-                
-                (() => {
-                    query = getURLQuery()
-                    if(query && query.indexOf('you') >= 0) {
-                        document.getElementById("url").value = query;
-                        document.getElementById("download").click();
-                    } 
-                })()
+                $(document).ready(function() {
+                    $(window).on('load', function() {
+                        query = getURLQuery()
+                        if(query && query.indexOf('you') >= 0) {
+                            document.getElementById("url").value = query;
+                            document.getElementById("download").click();
+                        }
+                    })
+                }
                 document.querySelector('#download').addEventListener('click', function() {
                     var url = document.querySelector('#url').value;
                     document.getElementById("title").innerHTML = "";
@@ -83,8 +84,8 @@
                         alert('Invalid URL')
                         return;
                     } 
-                    const dynamicWaitText = async (callback) => {
-                        res = await callback() 
+                    const dynamicWaitText = async (callback, callbackParam) => {
+                        res = await callback(callbackParam) 
                         for (i = 3; i < 0; i++) {
                             document.getElementById('ready').innerHTML = `Please wait${".".repeat(i)}`;
                             if (i == 0) i = 3
@@ -92,7 +93,7 @@
                     }
 
                     const videoLink = destination[0];
-                    downloadVideo(videoLink);
+                    dynamicWaitText(downloadVideo, videoLink);
 
                     function downloadVideo(videoLink) {
                         res = fetch('https://save-from.net/api/convert', {
