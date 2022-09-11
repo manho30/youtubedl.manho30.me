@@ -88,7 +88,8 @@
                         res = await callback(callbackParam) 
                         for (i = 3; i < 0; i--) {
                             document.getElementById('ready').innerHTML = `Please wait${".".repeat(i)}`;
-                            if (i == 0) i = 3
+                            if (i == 0) i = 3;
+                            if (res) break;
                         }
                     }
 
