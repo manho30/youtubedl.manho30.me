@@ -84,8 +84,8 @@
                         alert('Invalid URL')
                         return;
                     } 
-                    const dynamicWaitText = async (callback, callbackParam) => {
-                        res = await callback(callbackParam) 
+                    const dynamicWaitText = async (callback) => {
+                        res = await callback() 
                         for (i = 3; i < 0; i--) {
                             document.getElementById('ready').innerHTML = `Please wait${".".repeat(i)}`;
                             if (i == 0) i = 3;
@@ -94,7 +94,9 @@
                     }
 
                     const videoLink = destination[0];
-                    dynamicWaitText(downloadVideo, videoLink);
+                    dynamicWaitText(downloadVideo, function () {
+                        downloadVideo(videoLink)
+                    });
 
                     function downloadVideo(videoLink) {
                         res = fetch('https://save-from.net/api/convert', {
