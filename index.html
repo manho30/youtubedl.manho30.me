@@ -8,24 +8,21 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://kit.fontawesome.com/ba1aa6d09b.js"></script>
-        <script src="https://www.google.com/recaptcha/api.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
     </head>
     <!-- background with dark mode-->
     <body class="bg-gray-900 text-white">
         <h1 class="mt-20 text-3xl font-semibold text-center decoration-teal-400">
             YouTube Video Downloader
         </h1>
-        <!-- make a input field, and stay away 15px far from h1 title-->
         <input class="w-50 mt-7 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Place the link here" id="url">
         
-        <!-- make a download button and cancel button in same row with distance-->
-        <button class="g-recaptcha" 
-        data-sitekey="6LeM9mMiAAAAAEo5ar_ThTba-kzWeAR5UsTSLuCq" 
-        data-callback='onSubmit' 
-        data-action='submit'>Submit</button> 
-
+        <div class+"justify-center">
+            <div id="g_recaptcha"></div>
+        </div>
+        
         <div class="flex item-center justify-center mt-5">
-            <button id='download' class="bg-gray-300 hover:bg-gray-400 text-blue-800 font-bold py-2 px-4 rounded inline-flex items-center">
+            <button id='download' canDownload="false" class="bg-gray-300 hover:bg-gray-400 text-blue-800 font-bold py-2 px-4 rounded inline-flex items-center">
                 <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
                 <span>Download</span>
             </button>
@@ -46,10 +43,19 @@
             </div>
         </div>
             <script>
-                // on Google reCAPTCHA submit
-                function onSubmit(token) {
-                    document.getElementById("demo-form").submit();
-                }
+                /** google reCaptcha start */
+                var onRecaptchaLoad = function() {
+                    widgetId1 = grecaptcha.render('g_recaptcha', {
+                        'sitekey' : '6LfJJWQiAAAAALCkUSecbfzktA4Z2ANDYIG0auZG',
+                        'theme' : 'dark',
+                        'callback' : function (response) {
+                            if (response) {
+                                $('#download').attr('canDownload', 'true');
+                            }
+                        }
+                    });
+                };
+                /** google reCaptcha end */
 
                 document.querySelector('#cancel').addEventListener('click', function() {
                     window.location.reload();
@@ -86,6 +92,12 @@
                         alert('Please input a link');
                         return;
                     }
+                    
+                    if (document.querySelector('#download').getAttribute('canDownload') === 'false') {
+                        alert('Please complete the reCaptcha');
+                        return;
+                    }
+                    
                     const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/gm
                     const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?/gm
                     const destination = regex.exec(url)
