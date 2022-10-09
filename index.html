@@ -32,10 +32,10 @@
 </div>
 <div id="result">
     <div id="title" class="my-8 text-center text-white-500 text-xl mt-10"></div>
-    <img id="thumbnail" class="rounded mx-auto d-block"></img>
+    <img id="thumbnail" class="rounded mx-auto d-block mb-3"></img>
     <div class="flex item-center justify-center">
         <div id="ready" class="bg-blue-100 rounded-lg py-5 px-6 mb-4 text-base text-blue-700 mb-3" role="alert">
-            A simple primary alert with <a href="#" class="font-bold text-blue-800">an example link</a>. Give it a click if you like.
+            YouTube Video Downloader
         </div>
     </div>
     <div id='dllist'class='my-5 flex flex-wrap text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 md:flex mt-4 space-x-6 justify-center'>
@@ -116,14 +116,14 @@
         }
 
         if (document.querySelector('#download').getAttribute('canDownload') === 'false') {
-            document.getElementById('ready').innerHTML= '<i class="fa-sharp fa-solid fa-diamond-exclamation mr-2"></i> Please complete the reCaptcha'
-            document.getElementById('ready').className = 'my-8 text-center text-red-500 text-xl mt-10'
+            document.getElementById('ready').innerHTML= '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg>Please complete the reCAPTCHA!'
+            document.getElementById('ready').className = 'bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex item-center justify-center w-full" role="alert"'
             return;
         }
 
         if (DOWNLOAD != true) {
-            document.getElementById('ready').innerHTML= '<i class="fa-sharp fa-solid fa-diamond-exclamation mr-2"></i>Bad authentication! Please try again'
-            document.getElementById('ready').className = 'my-8 text-center text-red-500 text-xl mt-10'
+            document.getElementById('ready').innerHTML= '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg>Bad authentication! Please try again'
+            document.getElementById('ready').className = 'bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex item-center justify-center w-full" role="alert"'
             return;
         }
 
@@ -133,8 +133,8 @@
         const youtubeDestination = youtubeRegex.exec(url)
         // regex for youtube and youtube music
         if (!destination || !destination[0] || !youtubeDestination || !youtubeDestination[0]) {
-            document.getElementById('ready').innerHTML = '<i class="fa-sharp fa-solid fa-diamond-exclamation mr-2"></i>Invalid URL'
-            document.getElementById('ready').className = 'my-8 text-center text-red-500 text-xl mt-10'
+            document.getElementById('ready').innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg>Invalid URL! '
+            document.getElementById('ready').className = 'bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex item-center justify-center w-full" role="alert"'
             return;
         }
         document.getElementById('ready').innerHTML = `Please wait...`
