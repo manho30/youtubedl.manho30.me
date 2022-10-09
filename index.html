@@ -55,7 +55,7 @@
                     await delay(2000)
                     verifyRecaptcha(function(result) {
                         DOWNLOAD = result.success
-                        $('#download').attr('canDownload', 'true');
+                        $('#download').attr('canDownload', `${DOWNLOAD}`);
                         document.querySelector('#download').click()
                     })
                 }
@@ -188,7 +188,7 @@
     });
 </script>
 <p class="text-center text-red-500 text-xs mt-10">
-    Do not abuse this service. This site was fully protected by <a href="https://cloudflare.com" class="text-yellow-500">Cloudflare</a>
+    Do not abuse this service. This site was  protected by <a href="https://cloudflare.com" class="text-yellow-500">Cloudflare</a> and <a class="text-yellow-500">reCAPTCHA</a>
 </p>
 <p class="text-center text-red-500 text-xs mt-3">
     Web crawlers are not allowed to use this service.
