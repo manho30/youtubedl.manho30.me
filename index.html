@@ -159,7 +159,7 @@
                     if (res.meta) {
                         $(document).ready(function(){
                             document.getElementById('title').innerHTML = `${res.meta.title}<br>(${res.meta.duration})`;
-                            document.getElementById('thumbnail').src = `https://img.youtube.com/vi/${res.id}/hqdefault.jpg`;
+                            document.getElementById('thumbnail').src = `https://img.youtube.com/vi/${res.id}/maxresdefault.jpg`;
                             document.getElementById('mp4').className = "w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white";
                             document.getElementById('audio').className = `${$(window).width() < 768 ? '' :  " w-48 text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"}`;
                             document.getElementById('ready').innerHTML = '<i class="fa-brands fa-youtube"></i> Ready to download';
