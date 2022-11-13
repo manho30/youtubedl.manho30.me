@@ -52,7 +52,6 @@
             'callback' : async function (response) {
                 if (response) {
                     document.getElementById('ready').innerHTML= ('Checking legitimacy reCAPTCHA')
-                    await delay(2000)
                     verifyRecaptcha(function(result) {
                         DOWNLOAD = result.success
                         $('#download').attr('canDownload', `${DOWNLOAD}`);
